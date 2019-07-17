@@ -17,8 +17,9 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   # source("R/check.dupl.R")
   load(input)
   sink(file = output, append = F, split = F)
-  cat("Checking buzzard_db\t\t", as.character(Sys.time()),"\n",
-      "=======================================================================================")
+  cat("Checking buzzard_db\t\t", as.character(Sys.time()))
+  cat("\n")
+  cat("=======================================================================================")
   cat("\n\nbuzzard_db version info:\n")
   print(buzzard_db[["version"]], row.names = F)
   cat("=======================================================================================",
@@ -80,7 +81,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## 2. Duplicated IDs:
   ## -------------------------------------------------------------------------
- # x <- "Metal right, white wingtag N5"
+  # x <- "Metal right, yellow wingtag 7A"
   dupl.ids <-
     dplyr::filter(buzzard_db[["ring_db"]],
                   ID %in% check.dupl("ID", buzzard_db[["ring_db"]],
@@ -99,17 +100,26 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
       })
       if (length(test) > 0) TempDf <- TempDf[-(test - 1),]
       if (nrow(TempDf) == 1) TempDf <- data.frame()
-      return(TempDf)
     }
 
-    ## check if only ID difers
-    test1 <- unique.data.frame(TempDf[, c("Territory", "Ring", "ID")]) %>%
-      nrow
+    if (nrow(TempDf) != 0) {
+      ## check if only ID difers
+      test1 <- unique.data.frame(TempDf[, c("Territory", "Ring", "ID")]) %>%
+        nrow
 
-    ## check if ID is either "Metal right" or NA
-    test2 <- any(TempDf[["ID"]] %in% c("Metal right", NA))
-    if (test1 == 1 & isTRUE(test2)) {
-      return(data.frame())
+      ## check if ID is either "Metal right" or NA
+      test2 <- any(TempDf[["ID"]] %in% c("Metal right", NA))
+      if (test1 == 1 & isTRUE(test2)) {
+        return(data.frame())
+      } else {
+        TempDf2 <- TempDf[,-which(names(TempDf) == "Date")] %>%
+          unique.data.frame
+        if (nrow(TempDf2) == 1) {
+          return(data.frame())
+        } else {
+          return(TempDf)
+        }
+      }
     } else {
       return(TempDf)
     }
@@ -155,7 +165,23 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   print(pruned, row.names = F, right = F)
   cat("=======================================================================================")
   sink()
+
+  ## 4. Duplicated nests
   ## -------------------------------------------------------------------------
+  dupl.nests <-
+    dplyr::filter(buzzard_db[["repro_fledge_db"]],
+                  Nest %in% check.dupl("Nest", buzzard_db[["repro_fledge_db"]])) %>%
+    .[,c("Territory", "Nest")] %>%
+    unique.data.frame %>%
+    dplyr::filter(., Nest %in% check.dupl("Nest", df = .))
+  sink(output, append = T)
+  cat("\n\n")
+  cat("Duplicated Nests:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(dupl.nests[order(dupl.nests[["Nest"]]), 2:1], row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
   ## ## -------------------------------------------------------------------------
   ##
 
