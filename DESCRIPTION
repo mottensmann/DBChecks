@@ -1,7 +1,8 @@
 Package: DBChecks
 Title: Checking Database
 Version: 0.0.0.9000
-Authors@R: person("Meinolf", "Ottensmann", email = "meinolf.ottensmann@web.de", role = c("aut","cre"))
+Authors@R: c(person("Meinolf", "Ottensmann", email = "meinolf.ottensmann@web.de", role = c("aut","cre")),
+    person("Tony", "Rinaud", email = "tony.rinaud@gmail.com", role = c("aut")))
 Description: Checks an existing database to flag potential issues.
 Encoding: UTF-8
 LazyData: true
