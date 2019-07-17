@@ -1,0 +1,31 @@
+# Functions to check a database
+***
+
+*This package is developed to apply some testing for a specific case. Still some parts might apply elsewhere ...*
+
+***
+
+### Installing
+
+Install via `devtools` or `Cloning` from [GitHub](https://github.com/mottensmann/DBChecks) 
+
+```{r, eval=FALSE}
+devtools::install_github(repo = "mottensmann/DBChecks")
+```
+
+
+### Overview of the repository content
+
+-   **`R`** Some functions
+
+### Usage
+
+```{r, eval=FALSE}
+library(DBChecks)
+check.buzzard_db(input = "buzzard_db.RData")
+```
+
+
+***
+
+
