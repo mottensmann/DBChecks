@@ -10,7 +10,9 @@ Depends:
     R (>= 3.2.5)
 Imports:
     magrittr,
-    dplyr
+    dplyr,
+    geosphere,
+    readxl
 License: GPL (>= 2)
 RoxygenNote: 6.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues

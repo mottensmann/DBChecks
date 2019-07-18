@@ -2,4 +2,6 @@
 
 export(check.buzzard_db)
 export(check.dupl)
+export(compare.df)
+export(terr.centroid)
 import(magrittr)
