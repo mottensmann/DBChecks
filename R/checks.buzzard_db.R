@@ -81,7 +81,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## 2. Duplicated IDs:
   ## -------------------------------------------------------------------------
-  # x <- "Metal right, yellow wingtag 7A"
+  # x <- "Metal right, white wingtag TN"
   dupl.ids <-
     dplyr::filter(buzzard_db[["ring_db"]],
                   ID %in% check.dupl("ID", buzzard_db[["ring_db"]],
@@ -96,8 +96,9 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
       test <- sapply(2:nrow(TempDf), function(r) {
       check <- TempDf[["Date"]][r] > TempDf[["DateDeath"]][r - 1]
           if (isTRUE(check)) out <- r
-          else out <- 1
+          else out <- NA
       })
+      test <- na.omit(test)
       if (length(test) > 0) TempDf <- TempDf[-(test - 1),]
       if (nrow(TempDf) == 1) TempDf <- data.frame()
     }
