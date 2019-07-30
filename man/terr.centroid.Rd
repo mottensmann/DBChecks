@@ -5,14 +5,14 @@
 \title{Centoid of a territory}
 \usage{
 terr.centroid(name = NULL, df = buzzard_db[["repro_fledge_db"]],
-  weighted = T)
+  weighted = F)
 }
 \arguments{
 \item{name}{Territory name}
 
 \item{df}{data frame}
 
-\item{weighted}{Logical. By default weighted mean of all breeding attempts}
+\item{weighted}{Logical. By default only considers unique nests}
 }
 \value{
 Centroid lon and lat coordinates

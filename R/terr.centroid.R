@@ -40,3 +40,4 @@ terr.centroid <- function(name = NULL, df = buzzard_db[["repro_fledge_db"]], wei
 # library(magrittr)
 # name <- "Wittenbrock III"
 # df = buzzard_db[["repro_fledge_db"]]
+# x <- "Metal right, white wingtag AW"

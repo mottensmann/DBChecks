@@ -27,25 +27,6 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   sink()
   ## -------------------------------------------------------------------------
 
-  ## 0. Replace "Umlaute"
-  ## -------------------------------------------------------------------------
-  # buzzard_db[["ring_db"]][["Territory"]] <-
-  #   stringi::stri_replace_all_fixed(
-  #     str = buzzard_db[["ring_db"]][["Territory"]],
-  #     pattern = c("ä", "ö", "ü", "Ä", "Ö", "Ü", "ß"),
-  #     replacement = c("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"),
-  #     vectorize_all = FALSE
-  #   )
-  #
-  # buzzard_db[["repro_fledge_db"]][["Territory"]] <-
-  #   stringi::stri_replace_all_fixed(
-  #     str = buzzard_db[["repro_fledge_db"]][["Territory"]],
-  #     pattern = c("ä", "ö", "ü", "Ä", "Ö", "Ü", "ß"),
-  #     replacement = c("ae", "oe", "ue", "Ae", "Oe", "Ue", "ss"),
-  #     vectorize_all = FALSE
-  #   )
-  ## -------------------------------------------------------------------------
-
   ## 1. Duplicated rings:
   ## -------------------------------------------------------------------------
   dupl.rings <-
@@ -94,9 +75,9 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     TempDf <- dplyr::filter(dupl.ids, ID == x)
     if (nrow(TempDf) > 1) {
       test <- sapply(2:nrow(TempDf), function(r) {
-      check <- TempDf[["Date"]][r] > TempDf[["DateDeath"]][r - 1]
-          if (isTRUE(check)) out <- r
-          else out <- NA
+        check <- TempDf[["Date"]][r] > TempDf[["DateDeath"]][r - 1]
+        if (isTRUE(check)) out <- r
+        else out <- NA
       })
       test <- na.omit(test)
       if (length(test) > 0) TempDf <- TempDf[-(test - 1),]
@@ -118,12 +99,12 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
         if (nrow(TempDf2) == 1) {
           return(data.frame())
         } else {
-          return(TempDf)
-        }
+          ## last check to avoid reporting resampled ind
+          if (length(unique(TempDf[["Ring"]])) > 1) return(TempDf)
+          else return(data.frame())        }
       }
-    } else {
-      return(TempDf)
     }
+
   }) %>%
     do.call("rbind",.) %>%
     as.data.frame
@@ -137,13 +118,9 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   sink()
   ## -------------------------------------------------------------------------
 
-  ## 3. Duplicated Terr_IDs
+  ## 3. Duplicated Terr_IDs in ring_db
   ## -------------------------------------------------------------------------
   dupl.terrid <- buzzard_db[["ring_db"]][,c("Territory", "Terr_ID")]
-    # dplyr::filter(buzzard_db[["ring_db"]],
-    #               Terr_ID %in% check.dupl("Terr_ID", buzzard_db[["ring_db"]])) %>%
-    # .[,c("Territory", "Terr_ID")] %>%
-    # unique.data.frame
 
   pruned <- lapply(dupl.terrid[["Terr_ID"]] %>% unique, function(x) {
     TempDf <- dplyr::filter(dupl.terrid, Terr_ID == x)
@@ -160,7 +137,33 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     as.data.frame
   sink(output, append = T)
   cat("\n\n")
-  cat("Duplicated Terr_ID:\n")
+  cat("Duplicated Terr_ID in Ringing list:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(pruned, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
+
+  ## 3. Duplicated Terr_IDs in repro_fledge
+  ## -------------------------------------------------------------------------
+  dupl.terrid <- buzzard_db[["repro_fledge_db"]][,c("Territory", "Terr_ID")]
+
+  pruned <- lapply(dupl.terrid[["Terr_ID"]] %>% unique, function(x) {
+    TempDf <- dplyr::filter(dupl.terrid, Terr_ID == x)
+
+    ## check if only ID difers
+    test <- unique.data.frame(TempDf)
+    if (nrow(test) == 1) {
+      return(data.frame())
+    } else {
+      return(TempDf)
+    }
+  }) %>%
+    do.call("rbind",.) %>%
+    as.data.frame
+  sink(output, append = T)
+  cat("\n\n")
+  cat("Duplicated Terr_ID in Repro & Fledging:\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned, row.names = F, right = F)
@@ -188,8 +191,8 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   ## 5. Missing coords for broods
   ## -------------------------------------------------------------------------
   missing.coords <- dplyr::filter(buzzard_db[["repro_fledge_db"]],
-                                         is.na(N),
-                                         is.na(E))
+                                  is.na(N),
+                                  is.na(E))
   sink(output, append = T)
   cat("\n\n")
   cat("Missing Coords:\n")
@@ -208,7 +211,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   ## 6. Missing nests
   ## -------------------------------------------------------------------------
   missing.nests <- dplyr::filter(buzzard_db[["repro_fledge_db"]],
-                                  is.na(Nest))
+                                 is.na(Nest))
   sink(output, append = T)
   cat("\n\n")
   cat("Missing Nests (No perfect match to any GPX!):\n")
@@ -226,7 +229,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   ## -------------------------------------------------------------------------
 
 
-    ##
+  ##
 
 }# end check.buzzard_db
 #load("../../01-PhD/00-Raw/RData/buzzard_db.RData")
