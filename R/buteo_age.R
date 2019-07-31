@@ -32,7 +32,7 @@ buteo_age <- function(df = NULL, wing = "wing", sex = "sex", unit = c("mm", "cm"
     }
   }
   ## get standard growth data
-  path <- system.file("extdata", "buzzard_wing.txt", package = "MyR")
+  path <- system.file("extdata", "buzzard_wing.txt", package = "DBChecks")
   data <- read.table(path, header = T, skip = 1,
                      colClasses = c("integer", "factor", "factor",
                                     "numeric", "numeric", "integer",

@@ -234,6 +234,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   sink(output, append = T)
   cat("\n\n")
   cat("6. Changes in assigned Morphs or Sex:\n")
+  cat("\t[i.e. scoring differs between sampling points]\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned, row.names = F, right = F)
@@ -246,10 +247,13 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   ## ringing entries
   rings <- dplyr::filter(buzzard_db[["ring_db"]], Age == "juvenile") %>%
     .[order(.[["Ring"]]),c("Ring", "Territory", "Year", "Brood_ID", "Terr_Year")]
+  rings[["Brood_ID"]] <- as.character(rings[["Brood_ID"]])
 
   ## corresponding broods
   broods <-
     buzzard_db[["repro_fledge_db"]][,c("Brood_ID", "Repro", "Fledging")]
+  broods[["Brood_ID"]] <- as.character(broods[["Brood_ID"]])
+
 
   ## merge
   merged <- dplyr::left_join(rings, broods, by = "Brood_ID") %>%
@@ -257,13 +261,51 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   sink(output, append = T)
   cat("\n\n")
-  cat("7. Failures to match Rings to Broods:\n")
+  cat("7. Failures to match Brood information to Individual:\n")
+  cat("\t[i.e. it is not unambiguous where a chick was raised]\n")
   cat("=======================================================================================")
   cat("\n")
   print(merged, row.names = F, right = F)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
+
+  ## Check that Repro <= Number of ringed
+  ## -------------------------------------------------------------------------
+  Terr <- unique(buzzard_db[["ring_db"]][["Territory"]])
+
+  out <- lapply(Terr, function(x) {
+    # for every Territory
+    df1 <- dplyr::filter(buzzard_db[["ring_db"]],
+                        Territory == x)
+    Year <- unique(df1[["Year"]])
+    # for every year with data
+    out <- lapply(Year, function(y) {
+      df2 <- dplyr::filter(df1, Year == y)
+      return(data.frame(Year = y,
+             Rings = length(unique(df2[["Ring"]]))))
+    }) %>%
+      do.call("rbind",.)
+    out[["Territory"]] <- x
+    return(out)
+  }) %>%
+    do.call("rbind",.) %>%
+    dplyr::left_join(.,buzzard_db[["repro_fledge_db"]][,c("Territory", "Year", "Repro")],
+                     by = c("Territory","Year"))
+
+  pruned <- dplyr::filter(out, Rings != Repro)
+  pruned <- pruned[, c("Territory", "Year", "Repro", "Rings")]
+
+  sink(output, append = T)
+  cat("\n\n")
+  cat("9. Repro != Ring number. Please check:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(pruned, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
+  ## -------------------------------------------------------------------------
+
 
   ## Unexpected Territory size:  > 2 km between Nest and Centroid
   ## -------------------------------------------------------------------------
