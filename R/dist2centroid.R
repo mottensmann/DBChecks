@@ -6,5 +6,5 @@
 #'
 dist2centroid <- function(df = NULL) {
   geosphere::distGeo(p1 = df[,c("E", "N")],
-                     p2 = df[,c("centroid.long", "centroid.lat")])/1000
+                     p2 = df[,c("Mean.X", "Mean.Y")])/1000
 }

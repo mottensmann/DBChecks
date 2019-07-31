@@ -19,7 +19,8 @@ Imports:
     lme4,
     knitr,
     compareDF,
-    sp
+    sp,
+    rgdal
 License: GPL (>= 2)
 RoxygenNote: 6.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues

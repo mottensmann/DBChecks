@@ -17,5 +17,5 @@ data frame with mean x and y coordinates
 \description{
 Creates a SpatialPointsDataFrame from a data frame and then uses the
 meancoordinates function of QGIS vias RQGIS3 to calculate the mean
-coordinates of each territory
+coordinates of each territory.
 }

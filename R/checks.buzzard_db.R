@@ -32,7 +32,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   dupl.rings <-
     dplyr::filter(buzzard_db[["ring_db"]],
                   Ring %in% check.dupl("Ring", buzzard_db[["ring_db"]])) %>%
-    .[,c("Territory", "Year", "Ring", "ID")] %>%
+    .[,c("Territory", "Year", "Ring", "ID", "Age")] %>%
     unique.data.frame %>%
     dplyr::filter(., Ring %in% check.dupl("Ring", df = .))
   pruned <- lapply(dupl.rings[["Ring"]] %>% unique, function(x) {
@@ -52,10 +52,10 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     do.call("rbind",.) %>%
     as.data.frame
   sink(output, append = T)
-  cat("Duplicated entries Rings:\n")
+  cat("1. Duplicated Ring entries:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned[,c("Ring", "ID", "Territory", "Year")], row.names = F, right = F)
+  print(pruned[,c("Ring", "ID", "Territory", "Year", "Age")], row.names = F, right = F)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -108,9 +108,12 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   }) %>%
     do.call("rbind",.) %>%
     as.data.frame
+  pruned[,"Dead"][is.na(pruned[,"Dead"])] <- ""
+  pruned[, "DateDeath"] <- as.character(pruned[, "DateDeath"])
+  pruned[,"DateDeath"][is.na(pruned[,"DateDeath"])] <- ""
   sink(output, append = T)
   cat("\n\n")
-  cat("Duplicated entries Wingtags:\n")
+  cat("2. Duplicated Wingtags:\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned[,c("ID", "Ring", "Territory", "Year", "Dead", "DateDeath")], row.names = F, right = F)
@@ -137,7 +140,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     as.data.frame
   sink(output, append = T)
   cat("\n\n")
-  cat("Duplicated Terr_ID in Ringing list:\n")
+  cat("3.1 Duplicated Terr_ID in Ringing list:\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned, row.names = F, right = F)
@@ -163,7 +166,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     as.data.frame
   sink(output, append = T)
   cat("\n\n")
-  cat("Duplicated Terr_ID in Repro & Fledging:\n")
+  cat("3.2 Duplicated Terr_ID in Repro & Fledging:\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned, row.names = F, right = F)
@@ -180,7 +183,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     dplyr::filter(., Nest %in% check.dupl("Nest", df = .))
   sink(output, append = T)
   cat("\n\n")
-  cat("Duplicated Nests:\n")
+  cat("4. Nests shared among territories:\n")
   cat("=======================================================================================")
   cat("\n")
   print(dupl.nests[order(dupl.nests[["Nest"]]), 2:1], row.names = F, right = F)
@@ -195,7 +198,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
                                   is.na(E))
   sink(output, append = T)
   cat("\n\n")
-  cat("Missing Coords:\n")
+  cat("5. Missing Nest coordinates:\n")
   cat("=======================================================================================")
   cat("\n")
   print(missing.coords[, c("Territory", "Year", "Repro")], row.names = F, right = F)
@@ -203,28 +206,96 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   sink()
   ## -------------------------------------------------------------------------
 
-  ## Unexpected Territory size
+  ## Changes in Morphs
+  ## -------------------------------------------------------------------------
+  morphs <- buzzard_db[["ring_db"]] %>%
+    dplyr::filter(!is.na(Ring),
+                  !is.na(Morph)) %>%
+    dplyr::filter(Ring %in% .[["Ring"]][duplicated(.[["Ring"]])]) %>%
+    dplyr::filter(Territory %in% .[["Territory"]][duplicated(.[["Territory"]])]) %>%
+    dplyr::filter(Ring %in% .[["Ring"]][duplicated(.[["Ring"]])]) %>%
+    .[,c("Territory", "Year", "Ring", "Morph", "Sex", "Date")] %>%
+    .[order(.[,"Ring"]),]
+
+  pruned <- lapply(unique(morphs[["Ring"]]), function(x) {
+    temp <- dplyr::filter(morphs,
+                          Ring == x,
+                          Morph != "grey",
+                          Morph != 'white')[, c("Ring", "Territory", "Year", "Morph", "Sex")] %>%
+      unique.data.frame()
+
+    if (nrow(temp) == 1) temp <- data.frame()
+    if (nrow(temp) > 1) {
+      temp <- dplyr::left_join(temp, morphs,  by = c("Ring", "Territory", "Year", "Morph", "Sex"))
+    }
+    return(temp)
+  }) %>%
+    do.call("rbind",.)
+  sink(output, append = T)
+  cat("\n\n")
+  cat("6. Changes in assigned Morphs or Sex:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(pruned, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
+  ## -------------------------------------------------------------------------
+
+  ## Unknown broods
+  ## -------------------------------------------------------------------------
+  ## ringing entries
+  rings <- dplyr::filter(buzzard_db[["ring_db"]], Age == "juvenile") %>%
+    .[order(.[["Ring"]]),c("Ring", "Territory", "Year", "Brood_ID", "Terr_Year")]
+
+  ## corresponding broods
+  broods <-
+    buzzard_db[["repro_fledge_db"]][,c("Brood_ID", "Repro", "Fledging")]
+
+  ## merge
+  merged <- dplyr::left_join(rings, broods, by = "Brood_ID") %>%
+    dplyr::filter(., is.na(Brood_ID))
+
+  sink(output, append = T)
+  cat("\n\n")
+  cat("7. Failures to match Rings to Broods:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(merged, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
+  ## -------------------------------------------------------------------------
+
+  ## Unexpected Territory size:  > 2 km between Nest and Centroid
   ## -------------------------------------------------------------------------
   territory <- unique(buzzard_db[["repro_fledge_db"]][["Territory"]])
   out <- lapply(territory, function(focal.terr) {
     ## subset the data
-    df <- dplyr::filter(buzzard_db[["repro_fledge_db"]], Territory == focal.terr)
+    df <- dplyr::filter(buzzard_db[["repro_fledge_db"]],
+                        Territory == focal.terr,
+                        !is.na(N),
+                        !is.na(E))
     data.frame(Territory = df[["Territory"]],
                Year = df[["Year"]],
                Nest = df[["Nest"]],
                Lat = df[["N"]],
                Long = df[["E"]],
-               Centroid.Lat = df[["centroid.lat"]],
-               Centroid.Long = df[["centroid.long"]],
-               Dist2Centroid = dist2centroid(df))
+               Mean.N = df[["Mean.Y"]],
+               Mean.E = df[["Mean.X"]],
+               Dist2Centroid = DBChecks::dist2centroid(df))
 
   }) %>%
-    do.call("rbind",.)
+    do.call("rbind",.) %>%
+    dplyr::filter(., Dist2Centroid > 1.5)
+
+  sink(output, append = T)
+  cat("\n\n")
+  cat("8. Distance between Nest and Territory center > 1.5 km:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(out, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
   ## -------------------------------------------------------------------------
-
-
-
-  geosphere::di
 
   ## 6. Missing nests
   ## -------------------------------------------------------------------------
@@ -232,15 +303,37 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
                                  is.na(Nest))
   sink(output, append = T)
   cat("\n\n")
-  cat("Missing Nests (No perfect match to any GPX!):\n")
+  cat("9. Missing Nests (i.e. no GPX available):\n")
   cat("=======================================================================================")
   cat("\n")
-  print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F)
+  print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F, max = 999)
   cat("=======================================================================================")
   sink()
+
+  ## Check if values are plausible
   ## -------------------------------------------------------------------------
+  repro.tests <- data.frame(
+    Terr_pro = dplyr::filter(buzzard_db[["repro_fledge_db"]],
+                             !is.na(Terr_pro)) %>%
+      with(., any(Terr_pro > 1 || Terr_pro < 0)),
+    Hatch = dplyr::filter(buzzard_db[["repro_fledge_db"]],
+                          !is.na(Hatch)) %>%
+      with(., any(is.na(Fledging)))
+  )
+
+  if (any(isFALSE(repro.tests))) {
+    sink(output, append = T)
+    cat("\n\n")
+    cat("Plausability of values in Repro & Fledge")
+    cat("=======================================================================================")
+    cat("\n")
+    print(tests, row.names = F, right = F, max.print = 999)
+    cat("=======================================================================================")
+    sink()
+  }
   ## -------------------------------------------------------------------------
-  ## -------------------------------------------------------------------------
+
+    ## -------------------------------------------------------------------------
   ## -------------------------------------------------------------------------
   ## -------------------------------------------------------------------------
   ## -------------------------------------------------------------------------
