@@ -3,7 +3,6 @@
 #' @param df.new data frame
 #' @param df.old data frame
 #' @param by grouping column
-#' @import magrittr
 #' @export
 #'
 compare.df <- function(df.new = NULL, df.old = NULL, by = NULL) {

@@ -12,7 +12,14 @@ Imports:
     magrittr,
     dplyr,
     geosphere,
-    readxl
+    readxl,
+    RODBC,
+    ggplot2,
+    utils,
+    lme4,
+    knitr,
+    compareDF,
+    sp
 License: GPL (>= 2)
 RoxygenNote: 6.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues

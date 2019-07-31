@@ -205,8 +205,26 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## Unexpected Territory size
   ## -------------------------------------------------------------------------
+  territory <- unique(buzzard_db[["repro_fledge_db"]][["Territory"]])
+  out <- lapply(territory, function(focal.terr) {
+    ## subset the data
+    df <- dplyr::filter(buzzard_db[["repro_fledge_db"]], Territory == focal.terr)
+    data.frame(Territory = df[["Territory"]],
+               Year = df[["Year"]],
+               Nest = df[["Nest"]],
+               Lat = df[["N"]],
+               Long = df[["E"]],
+               Centroid.Lat = df[["centroid.lat"]],
+               Centroid.Long = df[["centroid.long"]],
+               Dist2Centroid = dist2centroid(df))
 
+  }) %>%
+    do.call("rbind",.)
   ## -------------------------------------------------------------------------
+
+
+
+  geosphere::di
 
   ## 6. Missing nests
   ## -------------------------------------------------------------------------

@@ -8,6 +8,8 @@ source.rmd(file, ...)
 }
 \arguments{
 \item{file}{file name}
+
+\item{...}{optional arguments passed on to source}
 }
 \description{
 Render Rmd in script
