@@ -4,19 +4,19 @@
 \alias{df2shape}
 \title{Create shape file using data frame as input}
 \usage{
-df2shape(df = NULL, out = NULL, layer = NULL, Long = "E",
+df2shape(df = NULL, dsn = NULL, layer = NULL, Long = "E",
   Lat = "N")
 }
 \arguments{
 \item{df}{data frame}
+
+\item{dsn}{output directory}
 
 \item{layer}{layer name}
 
 \item{Long}{Longitude}
 
 \item{Lat}{Latitude}
-
-\item{dsn}{output directory}
 }
 \description{
 Create shape file using data frame as input
