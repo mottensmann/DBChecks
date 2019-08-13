@@ -21,7 +21,9 @@ Imports:
     compareDF,
     sp,
     rgdal,
-    filesstrings
+    filesstrings,
+    reticulate,
+    rtf
 License: GPL (>= 2)
 RoxygenNote: 6.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues

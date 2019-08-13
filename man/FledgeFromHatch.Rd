@@ -4,7 +4,6 @@
 \alias{FledgeFromHatch}
 \title{Calculate Fledging date for hatching date}
 \usage{
-<<<<<<< HEAD
 FledgeFromHatch(x = NULL, year = "2019", verbose = T)
 }
 \arguments{
@@ -13,12 +12,6 @@ FledgeFromHatch(x = NULL, year = "2019", verbose = T)
 \item{year}{Year}
 
 \item{verbose}{logical}
-=======
-FledgeFromHatch(x)
-}
-\arguments{
-\item{x}{Julian day}
->>>>>>> fc2d0551f3c7501051da88ab03dd668bf5ebc2f9
 }
 \value{
 Fledging day as June day

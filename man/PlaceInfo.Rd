@@ -4,15 +4,12 @@
 \alias{PlaceInfo}
 \title{Get Location info}
 \usage{
-PlaceInfo(lat = NULL, long = NULL,
-  gadm36 = "internal/gadm/gadm36_3.shp", root = "C:/OSGeo4W64")
+PlaceInfo(lat = NULL, long = NULL, root = "C:/OSGeo4W64")
 }
 \arguments{
 \item{lat}{latitude}
 
 \item{long}{longitude}
-
-\item{gadm36}{directory where gadm36 level 3 shapes are stored}
 
 \item{root}{root of QGIS installation. By default attemtps to find it}
 }

@@ -40,7 +40,8 @@ meancoordinates <- function(df = NULL, root = NULL) {
                           INPUT = shape,
                           UID = "Terr_ID",
                           OUTPUT = file.path(tempdir(), "mean_coords.shp"),
-                          load_output = TRUE)
+                          load_output = TRUE,
+                          show_output_paths = F)
   out <- data.frame(Terr_ID = out[["Terr_ID"]],
                     Mean.X = out[["MEAN_X"]],
                     Mean.Y = out[["MEAN_Y"]])

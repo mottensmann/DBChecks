@@ -23,7 +23,7 @@ dir2nest <- function(ring_db = NULL, resights = NULL, repro_fledge_db = NULL) {
                      by = "Brood_ID")
 
   out <- geosphere::bearing(p1 = x[,c("E","N")],
-                            p2 = x[,c("long", "lat")])/1000
+                            p2 = x[,c("long", "lat")])
 
   return(out)
 

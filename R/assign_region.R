@@ -1,29 +1,22 @@
-#' Get Location info
+#' Assign nest to natural region
 #'
-#' @description
-#' For a given coordinate queries information of the place from country level down to municipality
+#' @inheritParams PlaceInfo
+#' @param overlay shape file
 #'
-#' @details
-#' Uses qgis:joinattributesbylocation to select data of the GADM ESRI shape  at level 3
-#'
-#' @param lat latitude
-#' @param long longitude
-#' @inheritParams meancoordinates
-#' @import reticulate
 #' @export
 #'
-PlaceInfo <- function(lat = NULL, long = NULL, root = 'C:/OSGeo4W64') {
+assign_region <- function(lat = NULL, long = NULL, overlay = NULL, root = 'C:/OSGeo4W64') {
   if ("RQGIS3" %in% rownames(installed.packages())) {
     library(RQGIS3, quietly = T)
   } else {
     stop("Install RQGIS3 to proceed")
   }
 
-  ## check that gadm file is there
-  if (file.exists(system.file("extdata", "gadm36_levels_2_3_subset.shp", package = "DBChecks"))) {
-    gadm36 <- system.file("extdata", "gadm36_levels_2_3_subset.shp", package = "DBChecks")
+  ## check that shape file is there
+  if (file.exists(system.file("extdata", "NaturalRegion.shp", package = "DBChecks"))) {
+    region <- system.file("extdata", "NaturalRegion.shp", package = "DBChecks")
   } else {
-  stop("gadm36_levels_2_3_subset.shp not found in extdata")
+    stop("NaturalRegion.shp not found in extdata")
   }
 
   ## Where to find RQGIS
@@ -49,7 +42,7 @@ PlaceInfo <- function(lat = NULL, long = NULL, root = 'C:/OSGeo4W64') {
   ## write a temp file
   shape.temp <- file.path(tempdir(),
                           paste0(paste0(sample(c(LETTERS, letters, 1:9), 8, replace = T), collapse = ""), "shape.shp")
-                          )
+  )
   rgdal::writeOGR(obj = shape, dsn = shape.temp, driver = "ESRI Shapefile", layer = "coord")
 
 
@@ -57,10 +50,10 @@ PlaceInfo <- function(lat = NULL, long = NULL, root = 'C:/OSGeo4W64') {
 
   joined.temp <- file.path(tempdir(),
                            paste0(paste0(sample(c(LETTERS, letters, 1:9), 8, replace = T), collapse = ""), "joined.shp")
-                           )
+  )
 
   out <- RQGIS3::run_qgis(alg = "qgis:joinattributesbylocation",
-                          INPUT = gadm36,
+                          INPUT = region,
                           JOIN = shape.temp,
                           METHOD = 1,
                           PREDICATE = 0,
@@ -68,9 +61,6 @@ PlaceInfo <- function(lat = NULL, long = NULL, root = 'C:/OSGeo4W64') {
                           OUTPUT = joined.temp,
                           load_output = T,
                           show_output_paths = F)
-
-
-
   ## reformat
   out <- data.frame(Country = out[['NAME_0']],
                     State = out[['NAME_1']],
@@ -80,4 +70,6 @@ PlaceInfo <- function(lat = NULL, long = NULL, root = 'C:/OSGeo4W64') {
   unlink(shape.temp)
   unlink(joined.temp)
   return(out)
+
 }
+
