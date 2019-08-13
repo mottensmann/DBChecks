@@ -20,7 +20,8 @@ Imports:
     knitr,
     compareDF,
     sp,
-    rgdal
+    rgdal,
+    filesstrings
 License: GPL (>= 2)
 RoxygenNote: 6.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues

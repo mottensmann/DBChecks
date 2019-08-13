@@ -5,9 +5,8 @@
 #' @param input path to 'buzzard_db.RData'
 #' @param output destination for output
 #' @return text file
-#' @export
 #' @import magrittr
-#'
+#' @export
 check.buzzard_db <- function(input = "RData/buzzard_db.RData",
                              output = paste0("Checks/buzzard_db-", Sys.Date(),".txt")) {
 
@@ -62,24 +61,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## 2. Duplicated IDs:
   ## -------------------------------------------------------------------------
-
-  ## kick out 'Metal right' or 'Metal left'
-
-  for (i in which(!is.na(buzzard_db[["ring_db"]][["ID"]]))) {
-    if (stringr::str_detect(buzzard_db[["ring_db"]][["ID"]][i], "Metal left, ")) {
-      buzzard_db[["ring_db"]][["ID"]][i] <- stringr::str_replace(buzzard_db[["ring_db"]][["ID"]][i], "Metal left, ", "")
-    } else {
-      if (stringr::str_detect(buzzard_db[["ring_db"]][["ID"]][i], "Metal right, ")) {
-        buzzard_db[["ring_db"]][["ID"]][i] <- stringr::str_replace(buzzard_db[["ring_db"]][["ID"]][i], "Metal right, ", "")
-      }
-    }
-    if (stringr::str_detect(buzzard_db[["ring_db"]][["ID"]][i], "wingtag")) {
-      buzzard_db[["ring_db"]][["ID"]][i] <- base::substring(buzzard_db[["ring_db"]][["ID"]][i], 1, 17)
-      buzzard_db[["ring_db"]][["ID"]][i] <- stringr::str_replace(buzzard_db[["ring_db"]][["ID"]][i], ",", "")
-    }
-    buzzard_db[["ring_db"]][["ID"]] <- trimws(buzzard_db[["ring_db"]][["ID"]])
-  }
-
+  # x <- "Metal right, white wingtag TN"
   dupl.ids <-
     dplyr::filter(buzzard_db[["ring_db"]],
                   ID %in% check.dupl("ID", buzzard_db[["ring_db"]],
@@ -107,7 +89,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
         nrow
 
       ## check if ID is either "Metal right" or NA
-      test2 <- any(TempDf[["ID"]] %in% c("Metal right", "Metal left", NA))
+      test2 <- any(TempDf[["ID"]] %in% c("Metal right", NA))
       if (test1 == 1 & isTRUE(test2)) {
         return(data.frame())
       } else {
@@ -287,63 +269,6 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   sink()
   ## -------------------------------------------------------------------------
 
-  ## Are fledging dates in repro and ringing list in concordance
-  ## -------------------------------------------------------------------------
-
-  ## shared territories among data frames
-  terrs <-
-    unique(buzzard_db[["repro_fledge_db"]][["Territory"]])[unique(buzzard_db[["repro_fledge_db"]][["Territory"]]) %in%
-                                                             unique(buzzard_db[["ring_db"]][["Territory"]])]
-  out <- lapply(terrs, function(terr) {
-    ring.df <- dplyr::filter(buzzard_db[["ring_db"]], Territory == terr)
-    repro.df <- dplyr::filter(buzzard_db[["repro_fledge_db"]], Territory == terr)
-    years <- unique(repro.df[["Year"]])[unique(repro.df[["Year"]]) %in% unique(ring.df[["Year"]])]
-    out <- lapply(years, function(year) {
-      ring.df2 <- dplyr::filter(ring.df, Year == year)
-      repro.df2 <- dplyr::filter(repro.df, Year == year)
-
-      test <- repro.df2[["Fledging"]] - FledgeFromHatch(x = mean(ring.df2[["Hatch"]], na.rm = T),
-                                                        year = year, verbose = F)
-      if (is.na(test) | is.nan(test)) {
-      } else {
-        data.frame(Territory = terr, Year = year, Diff = test)
-      }
-    }) %>%
-      do.call("rbind",.)
-  }) %>%
-    do.call("rbind",.)
-
-  sink(output, append = T)
-  cat("\n\n")
-  cat("8. Fledging estimates not in concordance:\n")
-  cat("\tAbs([Estimate in repro_fledge_db] - [Estimate in ring_db]) > 3\n")
-  cat("\tProbably due to interchanged assignments of neighbouring territories\n")
-    cat("=======================================================================================")
-  cat("\n")
-  print(dplyr::filter(out, abs(Diff) > 3), row.names = F, right = F)
-  cat("=======================================================================================")
-  sink()
-  ## -------------------------------------------------------------------------
-
-  ## Missing morphometrics but Ringed and wingtagged
-  ## -------------------------------------------------------------------------
-  # sink(output, append = T)
-  # cat("\n\n")
-  # cat("Missing morphometrics:\n")
-  # cat("=======================================================================================")
-  # cat("\n")
-  # print(dplyr::filter(buzzard_db[["ring_db"]],
-  #                     is.na(Morph),
-  #                     is.na(Wing),
-  #                     is.na(Weight),
-  #                     is.na(Tarsus),
-  #                     !is.na(Ring))[,c("Territory", "Date", "Ring", "ID", "Morph", "Sex", "Wing", "Weight",
-  #                                      "Tarsus")], row.names = F, right = F)
-  # cat("=======================================================================================")
-  # sink()
-  ## -------------------------------------------------------------------------
-
-  #
   ## Check that Repro <= Number of ringed
   ## -------------------------------------------------------------------------
   Terr <- unique(buzzard_db[["ring_db"]][["Territory"]])
@@ -372,7 +297,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   sink(output, append = T)
   cat("\n\n")
-  cat("9. Repro != Ring number. check if correct:\n")
+  cat("9. Repro != Ring number. Please check:\n")
   cat("=======================================================================================")
   cat("\n")
   print(pruned, row.names = F, right = F)
@@ -405,7 +330,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   sink(output, append = T)
   cat("\n\n")
-  cat("10. Distance between Nest and Territory center > 1.5 km:\n")
+  cat("8. Distance between Nest and Territory center > 1.5 km:\n")
   cat("=======================================================================================")
   cat("\n")
   print(out, row.names = F, right = F)
@@ -415,16 +340,16 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## 6. Missing nests
   ## -------------------------------------------------------------------------
-  # missing.nests <- dplyr::filter(buzzard_db[["repro_fledge_db"]],
-  #                                is.na(Nest))
-  # sink(output, append = T)
-  # cat("\n\n")
-  # cat("Missing Nests (i.e. no GPX available):\n")
-  # cat("=======================================================================================")
-  # cat("\n")
-  # print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F, max = 999)
-  # cat("=======================================================================================")
-  # sink()
+  missing.nests <- dplyr::filter(buzzard_db[["repro_fledge_db"]],
+                                 is.na(Nest))
+  sink(output, append = T)
+  cat("\n\n")
+  cat("9. Missing Nests (i.e. no GPX available):\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F, max = 999)
+  cat("=======================================================================================")
+  sink()
 
   ## Check if values are plausible
   ## -------------------------------------------------------------------------
@@ -449,6 +374,11 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   }
   ## -------------------------------------------------------------------------
 
+    ## -------------------------------------------------------------------------
+  ## -------------------------------------------------------------------------
+  ## -------------------------------------------------------------------------
+  ## -------------------------------------------------------------------------
+  ## -------------------------------------------------------------------------
 
 
   ##
