@@ -1,4 +1,5 @@
-# Functions to check a database
+# Collection of usueful functions to check and handle databases in R
+
 ***
 
 *This package is developed to apply some testing for a specific case. Still some parts might apply elsewhere ...*

@@ -4,14 +4,17 @@
 \alias{dist2nest}
 \title{Dist2Nest}
 \usage{
-dist2nest(ring_db = NULL, resights = NULL, repro_fledge_db = NULL)
+dist2nest(ring_db = NULL, resights = NULL, repro_fledge_db = NULL,
+  species = c("Buteo, buteo", "Milvus milvus"))
 }
 \arguments{
 \item{ring_db}{ring_db}
 
 \item{resights}{resights}
 
-\item{repro_fledge_db}{repro_fledge_db}
+\item{repro_fledge_db}{repro_fledge_db (only for Buteo buteo)}
+
+\item{species}{default Buteo buteo}
 }
 \value{
 distance to nest in Km

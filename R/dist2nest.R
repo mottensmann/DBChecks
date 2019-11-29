@@ -2,26 +2,33 @@
 #'
 #' @param resights resights
 #' @param ring_db ring_db
-#' @param repro_fledge_db repro_fledge_db
+#' @param repro_fledge_db repro_fledge_db (only for Buteo buteo)
+#' @param species default Buteo buteo
 #' @return distance to nest in Km
 #' @import magrittr
 #' @export
 #'
-dist2nest <- function(ring_db = NULL, resights = NULL, repro_fledge_db = NULL) {
+dist2nest <- function(ring_db = NULL, resights = NULL, repro_fledge_db = NULL, species = c("Buteo, buteo", "Milvus milvus")) {
 
+  #species <- match.arg(species)
 
-  ring_db <- ring_db[,c("Ring", "Brood_ID")] %>%
-    unique.data.frame() %>%
-    na.omit()
+  #if (species == "Buteo buteo") {
+    ring_db <- ring_db[,c("Ring", "Brood_ID")] %>%
+      unique.data.frame() %>%
+      na.omit()
 
-  ## if not unique, remove both case ;-(
-  case <- ring_db$Ring[(duplicated(ring_db$Ring))]
-  ring_db <- dplyr::filter(ring_db, Ring != case)
+    ## if not unique, remove both case ;-(
+    case <- ring_db$Ring[(duplicated(ring_db$Ring))]
+    ring_db <- dplyr::filter(ring_db, Ring != case)
 
-  ## add nests to resights
-  x <- dplyr::left_join(resights, ring_db, by = "Ring") %>%
-    dplyr::left_join(., repro_fledge_db[, c("Brood_ID", "N", "E")],
-                                                   by = "Brood_ID")
+    ## add nests to resights
+    x <- dplyr::left_join(resights, ring_db, by = "Ring") %>%
+      dplyr::left_join(., repro_fledge_db[, c("Brood_ID", "N", "E")],
+                       by = "Brood_ID")
+
+  #} else if (species == "Milvus milvus") {
+
+  #}
 
   out <- geosphere::distGeo(p1 = x[,c("E","N")],
                             p2 = x[,c("long", "lat")])/1000

@@ -5,7 +5,7 @@
 \title{Report of resightings}
 \usage{
 resight.report(x = NULL, buzzard_db = "RData/buzzard_db.RData",
-  out.file = NULL, digits = 2)
+  out.file = NULL, digits = 2, lang = c("German", "English"))
 }
 \arguments{
 \item{x}{Ring}
@@ -15,6 +15,8 @@ resight.report(x = NULL, buzzard_db = "RData/buzzard_db.RData",
 \item{out.file}{valid path to write to text. By default temporary only}
 
 \item{digits}{number of decimals}
+
+\item{lang}{language}
 }
 \description{
 Report of resightings

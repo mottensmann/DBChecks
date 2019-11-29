@@ -245,26 +245,38 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   ## -------------------------------------------------------------------------
   ## ringing entries
   rings <- dplyr::filter(buzzard_db[["ring_db"]], Age == "juvenile") %>%
-    .[order(.[["Ring"]]),c("Ring", "Territory", "Year", "Brood_ID", "Terr_Year")]
+    .[order(.[["Ring"]]),c("Ring", "Territory", "Year", "Brood_ID", "Terr_Year", "Terr_ID")]
   rings[["Brood_ID"]] <- as.character(rings[["Brood_ID"]])
 
   ## corresponding broods
   broods <-
-    buzzard_db[["repro_fledge_db"]][,c("Brood_ID", "Repro", "Fledging")]
+    buzzard_db[["repro_fledge_db"]][,c("Brood_ID", "Terr_ID", "Repro", "Fledging", "Year")]
   broods[["Brood_ID"]] <- as.character(broods[["Brood_ID"]])
 
 
   ## merge
-  merged <- dplyr::left_join(rings, broods, by = "Brood_ID") %>%
-    dplyr::filter(., is.na(Brood_ID))
+  # merged <- dplyr::left_join(rings, broods, by = c("Brood_ID", "Year")) %>%
+  #   dplyr::filter(., is.na(Brood_ID))
+
+  ## For each individual, check that there is a known brood
+  unknown_broods <- lapply(1:nrow(rings), function(row) {
+    if (rings[["Brood_ID"]][row]  %in% broods[["Brood_ID"]]) {
+
+    } else {
+      rings[row,c("Ring", "Territory", "Brood_ID", "Year")]
+    }
+  }) %>%
+    do.call("rbind",.)
+  unknown_broods <- unknown_broods[order(unknown_broods$Year, decreasing = F),]
+
 
   sink(output, append = T)
   cat("\n\n")
   cat("7. Failures to match Brood information to Individual:\n")
-  cat("\t[i.e. it is not unambiguous where a chick was raised]\n")
+  cat("\t[i.e. it is ambiguous where a chick was raised]\n")
   cat("=======================================================================================")
   cat("\n")
-  print(merged, row.names = F, right = F)
+  print(unknown_broods, row.names = F, right = F)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -351,6 +363,44 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("=======================================================================================")
   sink()
 
+
+  ## 6. Multiple nest per territory within a year
+  ## -------------------------------------------------------------------------
+  df <- buzzard_db[["ring_db"]][,c("Ring", "Nest", "Year", "Territory")] %>%
+    dplyr::left_join(., buzzard_db[["repro_fledge_db"]][, c("Year", "N", "E", "Territory")],
+                     by = c("Territory", "Year"))
+
+  ## divide in years
+  seasons <- unique(df[["Year"]])
+  out <- lapply(seasons, function(season) {
+    # subset the data
+    data.sub <- dplyr::filter(df, Year == season)
+    # divide in territories
+    territories <- unique(data.sub[["Territory"]])
+    out <- lapply(territories, function(territory) {
+      data.sub.sub <- dplyr::filter(data.sub, Territory == territory)
+      if (length(unique(data.sub.sub[["Nest"]])) > 1) {
+        data.frame(Territory = territory,
+                   Year = data.sub.sub[["Year"]][1])
+      } else {
+        data.frame()
+      }
+    }) %>% do.call("rbind",.)
+    return(out)
+  }) %>%
+    do.call("rbind",.)
+  sink(output, append = T)
+  cat("\n\n")
+  cat("6. Multiple Nests for the same territory x year:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(out, row.names = F, right = F)
+  cat("=======================================================================================")
+  sink()
+
+  ## -------------------------------------------------------------------------
+  ##
+
   ## Check if values are plausible
   ## -------------------------------------------------------------------------
   repro.tests <- data.frame(
@@ -375,4 +425,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
 
 }# end check.buzzard_db
-#load("../../01-PhD/00-Raw/RData/buzzard_db.RData")
+# rm(list = ls())
+# library(magrittr)
+#input <- ("../../01-PhD/00-Raw/RData/buzzard_db.RData")
+#output = tempfile()

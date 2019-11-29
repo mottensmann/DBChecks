@@ -1,6 +1,6 @@
 #' Check the format of a RING database
 #'
-#' @inheritParams export2Ring
+#' @inheritParams export2ring
 #' @param Lookup access database with variable definitions
 #' @param DNS1 RING Database used as standard
 #' @param DNS2 RING Databse to check
@@ -247,7 +247,28 @@ CheckRing <- function(DNS1 = "Ring2017", DNS2 = "Ring2018", Lookup = "Lookup") {
     lookup[["TLKPCATCHINGLURES"]][["STRTEXT"]][lookup[["TLKPCATCHINGLURES"]][["STRCODE"]] %in% colnames(out)]
   print(out)
 
+  ## overview of rings
+  x <- tblRinging.new[["strRingNr"]]
+  x <- gsub(pattern = ".", replacement = "", x =  x, fixed = TRUE)
+  x <- gsub(pattern = "J", replacement = "9999999999", x =  x, fixed = TRUE)
+  x <- unique(x)
+  x <- as.numeric(x)
+  x <- sort(x)
+  breaks <- which(diff(x) != 1)
+  n <- c(1, (breaks + 1))
+
+  out <- data.frame(Series = (1:(length(breaks) + 1)),
+                    FirstRing = x[n],
+                    LastRing = x[c(breaks, length(x))])
+  out[["Number"]] <- (out[["LastRing"]] - out[["FirstRing"]]) + 1
+  out[["FirstRing"]] <- gsub(pattern = "9999999999", replacement = "J", out[["FirstRing"]])
+  out[["LastRing"]] <- gsub(pattern = "9999999999", replacement = "J", out[["LastRing"]])
+  cat("\nOverview ring series:\n\n")
+  print(out)
+
+
   close(ch1)
   close(ch2)
+  close(ch3)
 }
 

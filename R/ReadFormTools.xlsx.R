@@ -35,7 +35,7 @@ for (i in 1:nrow(data)) {
 ## set up data frame sturcture
 df <- data.frame(
   Date = as.POSIXct(data[["Date"]], format = "%d-%b-%y") %>%
-    as.Date() - 365,
+    as.Date(), #-365
   Coords = NA,
   Where = data[["Where"]],
   Lat = data[["Lat"]],
@@ -50,7 +50,8 @@ df <- data.frame(
   Mail = data[["Email"]],
   LifeHistory = data[["History"]],
   Submitted = data[["Submitted"]] %>%
-    as.character())
+    as.character(),
+  Species = data[["Species"]])
 
 ## trim whitespaces and special characters
 df <- apply(df,2,trimws) %>%
