@@ -2,12 +2,13 @@
 #'
 #' @param digits number of decimals
 #' @param lang language
+#' @param brood Default False. If True, returns resights of siblings
 #' @inheritParams birdinfo
 #' @import rtf
 #' @import magrittr
 #' @export
 #'
-resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.file = NULL, digits = 2, lang = c("German", "English")) {
+resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.file = NULL, digits = 2, lang = c("German", "English"), brood = FALSE) {
   #options(width = 1e4, digits = 2)
   ## checks
   ## ======================================================================================================================================

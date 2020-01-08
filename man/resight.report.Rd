@@ -5,7 +5,8 @@
 \title{Report of resightings}
 \usage{
 resight.report(x = NULL, buzzard_db = "RData/buzzard_db.RData",
-  out.file = NULL, digits = 2, lang = c("German", "English"))
+  out.file = NULL, digits = 2, lang = c("German", "English"),
+  brood = FALSE)
 }
 \arguments{
 \item{x}{Ring}
@@ -17,6 +18,8 @@ resight.report(x = NULL, buzzard_db = "RData/buzzard_db.RData",
 \item{digits}{number of decimals}
 
 \item{lang}{language}
+
+\item{brood}{Default False. If True, returns resights of siblings}
 }
 \description{
 Report of resightings

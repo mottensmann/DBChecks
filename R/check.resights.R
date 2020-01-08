@@ -23,7 +23,7 @@ check.resights <- function(buzzard_db = "RData/buzzard_db.RData") {
     ## check if different oberservers and location
     if (nrow(test) > 1) {
       if (any(duplicated(test[["Observer"]]))) {
-        return(temp)
+        return(test)
       } else {
         return(data.frame())
       }

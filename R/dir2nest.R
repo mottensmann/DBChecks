@@ -13,9 +13,9 @@ dir2nest <- function(ring_db = NULL, resights = NULL, repro_fledge_db = NULL) {
     unique.data.frame() %>%
     na.omit()
 
-  ## if not unique, remove both case ;-(
+  ## if not unique, remove both cases ;-(
   case <- ring_db$Ring[(duplicated(ring_db$Ring))]
-  ring_db <- dplyr::filter(ring_db, Ring != case)
+  if (length(case) > 1) ring_db <- dplyr::filter(ring_db, Ring != case)
 
   ## add nests to resights
   x <- dplyr::left_join(resights, ring_db, by = "Ring") %>%

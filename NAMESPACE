@@ -2,6 +2,7 @@
 
 export(CheckRing)
 export(FledgeFromHatch)
+export(Nest2Polygon)
 export(PlaceInfo)
 export(ReadFormTools.xlsx)
 export(assign_region)
