@@ -9,15 +9,17 @@
 #' df data frame containing the following variables:
 #'  `E` (Long), `N` (Lat) and `Terr_ID` as a grouping variable
 #'
+#' @param out output
+#'
 #' @inheritParams PlaceInfo
 #'
-#' @import magrittr reticulate
-#'
-#' @return
+#' @import magrittr
 #'
 #' @export
 #'
-Nest2Polygon <- function(df = NULL, root = 'C:/OSGeo4W64') {
+Nest2Polygon <- function(df = NULL, root = 'C:/OSGeo4W64', out = NULL) {
+
+  if (is.null(out)) stop("provide output directory by defining 'out'")
 
   ## load and set up interface to QGIS
   if ("RQGIS3" %in% rownames(installed.packages())) {
@@ -34,9 +36,9 @@ Nest2Polygon <- function(df = NULL, root = 'C:/OSGeo4W64') {
   }
 
   ## get corner coordinates for all territories
-  shape <- lapply(unique(buzzard_db[["repro_fledge_db"]][["Territory"]]), function(terr) {
+  shape <- lapply(unique(df[["Terr_ID"]]), function(terr) {
     df <-
-      dplyr::filter(buzzard_db$repro_fledge_db, Territory == terr)[,c("E","N", "Terr_ID")] %>%
+      dplyr::filter(buzzard_db$repro_fledge_db, Terr_ID == terr)[,c("E","N", "Terr_ID")] %>%
       unique.data.frame()
 
     N <- order(df[["N"]], decreasing = T)[1]
@@ -66,9 +68,6 @@ Nest2Polygon <- function(df = NULL, root = 'C:/OSGeo4W64') {
   path.temp <- file.path(tempdir(),
                          paste0(paste0(sample(c(LETTERS, letters, 1:9), 8, replace = T), collapse = ""), "path.shp")
   )
-  polygons.temp <- file.path(tempdir(),
-                             paste0(paste0(sample(c(LETTERS, letters, 1:9), 8, replace = T), collapse = ""), "polygons.shp")
-  )
 
   ## write shape file
   rgdal::writeOGR(obj = shape, dsn = shape.temp, driver = "ESRI Shapefile", layer = "coord")
@@ -82,26 +81,28 @@ Nest2Polygon <- function(df = NULL, root = 'C:/OSGeo4W64') {
                    load_output = F,
                    show_output_paths = F)
 
-  # RQGIS3::find_algorithms("linestopolygons")
+  RQGIS3::find_algorithms("points")
   # RQGIS3::get_args_man("saga:convertlinestopolygons")
   # RQGIS3::get_options("saga:convertlinestopolygons")
 
   ## path to polygons
   RQGIS3::run_qgis(alg = "saga:convertlinestopolygons",
                    LINES = path.temp,
-                   POLYGONS = polygons.temp,
+                   POLYGONS = out,
                    load_output = F,
                    show_output_paths = F)
   ## discard temp files
   unlink(shape.temp)
   unlink(path.temp)
-  unlink(polygons.temp)
 
 }#end Nest2polygon
 # rm(list = ls())
 # library(magrittr)
-# library(reticulate)
+# #library(reticulate)
 # library(RQGIS3)
 # load("../../01-PhD/00-Raw/RData/buzzard_db.RData")
-
-
+# root = 'C:/OSGeo4W64'
+# out <- "Shapes/TerrPolygons.shp"
+# df <- buzzard_db$repro_fledge_db
+#
+#
