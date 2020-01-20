@@ -42,6 +42,7 @@ resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.
       if (ring[["Morph"]][i] == "g2") ring[["Morph"]][i] <- "Dunkel (2)"
       if (ring[["Morph"]][i] == "g2+") ring[["Morph"]][i] <- "Dunkel (2+)"
       if (ring[["Morph"]][i] == "g2-") ring[["Morph"]][i] <- "Dunkel (2-)"
+      if (ring[["Morph"]][i] == "g2?") ring[["Morph"]][i] <- "Dunkel (2)"
       if (ring[["Morph"]][i] == 2) ring[["Morph"]][i] <- "Dunkel (2)"
       if (ring[["Morph"]][i] == "2+") ring[["Morph"]][i] <- "Dunkel (2+)"
       if (ring[["Morph"]][i] == 3) ring[["Morph"]][i] <- "Intermediär (3)"
@@ -167,7 +168,7 @@ resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.
 
   ring <- ring[,c("Date", "N", "E", "Territory", "State", "District", "Municipality", "Brood_Size", "Rank", "Morph", "Sex")]
   if (lang == "German") {
-    names(ring) <- c("Datum", "Lat", "Long", "Revier", "Bundesland", "Kreis", "Gemeinde", "Brutgröße", "Brutrang", "Morphe", "Geschlecht")
+    names(ring) <- c("Datum", "Lat", "Long", "Revier", "Bundesland", "Kreis/Kreisfreie Stadt", "Gemeinde", "Brutgröße", "Brutrang", "Morphe", "Geschlecht")
   } else {
     names(ring) <- c("Date", "Lat", "Long", "Territory", "Federal state", "District", "Municipality", "Brood size", "Brood rank", "Morph", "Sex")
   }
@@ -195,7 +196,7 @@ resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.
   resights[["Distance_from_Nest"]] <- round(resights[["Distance_from_Nest"]], digits)
 
   if (lang == "German") {
-    names(resights) <- c("Datum", "Lat", "Long", "Land", "Bundesland", "Kreis", "Gemeinde", "Melder", "Entfernung zum Geburtsort [km]")
+    names(resights) <- c("Datum", "Lat", "Long", "Land", "Bundesland", "Kreis/Kreisfreie Stadt", "Gemeinde", "Melder", "Entfernung zum Geburtsort [km]")
   } else {
     names(resights) <- c("Date", "Lat", "Long", "Country", "State/Province", "District", "Municipality", "Observer", "Distance to place of birth [km]")
   }
