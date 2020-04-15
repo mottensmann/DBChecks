@@ -4,8 +4,13 @@
 \alias{buteo_age}
 \title{Estimate the age of juvenile buzzards based on wing length}
 \usage{
-buteo_age(df = NULL, wing = "wing", sex = "sex", unit = c("mm",
-  "cm"), .plot = F)
+buteo_age(
+  df = NULL,
+  wing = "wing",
+  sex = "sex",
+  unit = c("mm", "cm"),
+  .plot = F
+)
 }
 \arguments{
 \item{df}{data frame containing data}

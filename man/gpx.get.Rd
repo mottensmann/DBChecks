@@ -2,7 +2,7 @@
 % Please edit documentation in R/gpx.get.R
 \name{gpx.get}
 \alias{gpx.get}
-\title{Get corresponding GPX data for pair of coordinates}
+\title{Get corresponding GPX waypoint for a pair of coordinates}
 \usage{
 gpx.get(gpx.sp = gpx, repro = repro_fledge_db, digits = 5)
 }
@@ -14,5 +14,5 @@ gpx.get(gpx.sp = gpx, repro = repro_fledge_db, digits = 5)
 \item{digits}{desired resolution (i.e. decimal point)}
 }
 \description{
-Get corresponding GPX data for pair of coordinates
+Get corresponding GPX waypoint for a pair of coordinates
 }

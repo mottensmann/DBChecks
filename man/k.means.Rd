@@ -4,8 +4,7 @@
 \alias{k.means}
 \title{K-means}
 \usage{
-k.means(buzzard_db = "RData/buzzard_db.RData", root = "C:/OSGeo4W64",
-  k = 2)
+k.means(buzzard_db = "RData/buzzard_db.RData", root = "C:/OSGeo4W64", k = 2)
 }
 \arguments{
 \item{buzzard_db}{path to buzzard_db}

@@ -4,8 +4,10 @@
 \alias{check.buzzard_db}
 \title{Checking buzzard_db}
 \usage{
-check.buzzard_db(input = "RData/buzzard_db.RData",
-  output = paste0("Checks/buzzard_db-", Sys.Date(), ".txt"))
+check.buzzard_db(
+  input = "RData/buzzard_db.RData",
+  output = paste0("Checks/buzzard_db-", Sys.Date(), ".txt")
+)
 }
 \arguments{
 \item{input}{path to 'buzzard_db.RData'}

@@ -4,12 +4,13 @@
 \alias{pool.shapes}
 \title{Pool shapes}
 \usage{
-
-  pool.shapes(folder = c("../../01-PhD/GIS/basis-dlm/basis-dlm_EPSG25832_Shape/",
-  "../../01-PhD/GIS/D21638_UNI_Bielefeld/",
-  "../../01-PhD/GIS/D21966_UNI_Bielefeld/3716_3815/",
-  "../../01-PhD/GIS/D21966_UNI_Bielefeld/3817/"),
-  outdir = "../../01-PhD/GIS/DLM/")
+pool.shapes(
+  folder = c("../../01-PhD/GIS/basis-dlm/basis-dlm_EPSG25832_Shape/",
+    "../../01-PhD/GIS/D21638_UNI_Bielefeld/",
+    "../../01-PhD/GIS/D21966_UNI_Bielefeld/3716_3815/",
+    "../../01-PhD/GIS/D21966_UNI_Bielefeld/3817/"),
+  outdir = "../../01-PhD/GIS/DLM/"
+)
 }
 \arguments{
 \item{folder}{character vector giving directories}

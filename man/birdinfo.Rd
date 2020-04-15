@@ -4,8 +4,7 @@
 \alias{birdinfo}
 \title{Summarise all data from specific individual}
 \usage{
-birdinfo(x = NULL, buzzard_db = "RData/buzzard_db.RData",
-  out.file = NULL)
+birdinfo(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.file = NULL)
 }
 \arguments{
 \item{x}{Ring}

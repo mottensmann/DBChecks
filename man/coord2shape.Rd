@@ -4,9 +4,14 @@
 \alias{coord2shape}
 \title{Create shape for a single coordinate}
 \usage{
-coord2shape(lat = NULL, long = NULL, out = DBChecks::temp.shp(),
+coord2shape(
+  lat = NULL,
+  long = NULL,
+  out = DBChecks::temp.shp(),
   CRS = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  root = "C:/OSGeo4W64", EPSG = "EPSG:32632")
+  root = "C:/OSGeo4W64",
+  EPSG = "EPSG:32632"
+)
 }
 \arguments{
 \item{lat}{lat}

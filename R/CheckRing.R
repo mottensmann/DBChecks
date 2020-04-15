@@ -1,6 +1,5 @@
 #' Check the format of a RING database
 #'
-#' @inheritParams export2ring
 #' @param Lookup access database with variable definitions
 #' @param DNS1 RING Database used as standard
 #' @param DNS2 RING Databse to check

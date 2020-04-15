@@ -4,8 +4,17 @@
 \alias{digitize_graph}
 \title{Digitize graphs using package digitize}
 \usage{
-digitize_graph(fname, x_min, x_max, y_min, y_max, data_sets = 1,
-  labels = 1:data_sets, log = c("", "x", "y", "xy"), plot = TRUE)
+digitize_graph(
+  fname,
+  x_min,
+  x_max,
+  y_min,
+  y_max,
+  data_sets = 1,
+  labels = 1:data_sets,
+  log = c("", "x", "y", "xy"),
+  plot = TRUE
+)
 }
 \arguments{
 \item{fname}{Filename/ path of the graphic to read}

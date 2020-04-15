@@ -4,8 +4,14 @@
 \alias{buteo_condition}
 \title{residual weight with respect to a regression of wing length against weight}
 \usage{
-buteo_condition(df = NULL, wing = "wing", weight = "weight",
-  sex = "sex", unit = c("cm", "mm"), .plot = F)
+buteo_condition(
+  df = NULL,
+  wing = "wing",
+  weight = "weight",
+  sex = "sex",
+  unit = c("cm", "mm"),
+  .plot = F
+)
 }
 \arguments{
 \item{df}{data frame containing data}

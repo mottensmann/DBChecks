@@ -4,8 +4,7 @@
 \alias{habitat.analysis}
 \title{Habitat analysis}
 \usage{
-habitat.analysis(features = NULL, overlay = NULL,
-  root = "C:/OSGeo4W64")
+habitat.analysis(features = NULL, overlay = NULL, root = "C:/OSGeo4W64")
 }
 \arguments{
 \item{features}{list of ESRI shapes}

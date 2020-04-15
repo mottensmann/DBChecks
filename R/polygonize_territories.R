@@ -16,6 +16,10 @@
 #'
 #' @param out path
 #'
+#' @param tempdir temp directory
+#'
+#' @inheritParams PlaceInfo
+#'
 #' @export
 #'
 polygonise_territories <- function(nests = buzzard_db[["repro_fledge_db"]],

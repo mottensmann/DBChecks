@@ -4,8 +4,7 @@
 \alias{df2shape}
 \title{Create shape file using data frame as input}
 \usage{
-df2shape(df = NULL, dsn = NULL, layer = NULL, Long = "E",
-  Lat = "N")
+df2shape(df = NULL, dsn = NULL, layer = NULL, Long = "E", Lat = "N")
 }
 \arguments{
 \item{df}{data frame}

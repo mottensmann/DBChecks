@@ -4,14 +4,21 @@
 \alias{polygonise_territories}
 \title{Polygonize territories}
 \usage{
-polygonise_territories(nests = buzzard_db[["repro_fledge_db"]],
-  root = "C:/OSGeo4W64", temp.dir = "Shapes/temp/",
-  out = "Shapes/TerrPolygon2.shp")
+polygonise_territories(
+  nests = buzzard_db[["repro_fledge_db"]],
+  root = "C:/OSGeo4W64",
+  temp.dir = "Shapes/temp/",
+  out = "Shapes/TerrPolygon2.shp"
+)
 }
 \arguments{
 \item{nests}{data frame}
 
+\item{root}{root of QGIS installation. By default attemtps to find it}
+
 \item{out}{path}
+
+\item{tempdir}{temp directory}
 }
 \description{
 Based on all nest coordinates for a given territory, a polygon area is

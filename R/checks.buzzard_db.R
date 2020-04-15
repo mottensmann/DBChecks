@@ -403,6 +403,29 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
 
   ## Check if values are plausible
   ## -------------------------------------------------------------------------
+  ring.db <- buzzard_db$ring_db
+  morphs <- ring.db$Morph %>% as.factor() %>% summary()
+  morphs <- data.frame(Morph = names(morphs),
+                       Entries = morphs)
+  morphs <- morphs[order(morphs$Entries, decreasing = T),]
+  ekto <- ring.db$Ekto %>% as.factor() %>% summary()
+  ekto <- data.frame(Ekto = names(ekto),
+                     Entries = ekto)
+
+
+  sink(output, append = T)
+  cat("\n\n")
+  cat("Summary of factor levels Ringing list")
+  cat("=======================================================================================")
+  cat("\n")
+  cat("Morphs:\n")
+  print(morphs, row.names = F, right = F, max.print = 999)
+  cat("Ekto:\n")
+  print(ekto, row.names = F, right = F, max.print = 999)
+  cat("=======================================================================================")
+  sink()
+
+
   repro.tests <- data.frame(
     Terr_pro = dplyr::filter(buzzard_db[["repro_fledge_db"]],
                              !is.na(Terr_pro)) %>%
@@ -423,9 +446,66 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     sink()
   }
 
+  ## resightings after death
+  dead <- dplyr::filter(buzzard_db$ring_db, !is.na(Dead))[["Ring"]] %>%
+    unique()
+ # dead <- dead[113]
+  test <- lapply(dead, function(x) {
+    date <- dplyr::filter(buzzard_db$ring_db, Ring == x)[,c("DateDeath", "AccDateDeath")]
+    date <- date[!is.na(date$DateDeath),]
+    resights <- dplyr::filter(buzzard_db$resights, Ring == x)[["Date"]]
+    if (length(resights) > 0) {
+      if (any(resights > date$DateDeath)) {
+        data.frame(Ring = x, DateDeath = date$DateDeath,
+                   AccDateDeath = date$AccDateDeath, Resighted = resights[which(resights > date$DateDeath)])
+      } else {
+        data.frame()
+      }
+    } else {
+      data.frame()
+    }
+
+  }) %>%
+    do.call("rbind",.)
+
+  if (nrow(test) > 0) {
+    sink(output, append = T)
+    cat("\n\n")
+    cat("Check plausability of resights for dead encounters")
+    cat("=======================================================================================")
+    cat("\n")
+    print(test, row.names = F, right = F, max.print = 999)
+    cat("=======================================================================================")
+    sink()
+  }
+
+  ## Check that death info is present for all entries of an individual
+
+  tmp <- dplyr::filter(buzzard_db$ring_db, !is.na(Dead))
+  check <- lapply(unique(tmp$Ring), function(x) {
+    tmp2 <- dplyr::filter(buzzard_db$ring_db, Ring == x)
+    if (any(is.na(tmp2$Dead))) {
+      tmp2[,c("no", "Ring", "Dead", "DateDeath")]
+    } else {
+      data.frame()
+    }
+  }) %>%
+    do.call("rbind",.)
+
+  if (nrow(check) > 0) {
+    sink(output, append = T)
+    cat("\n\n")
+    cat("Missing death information:\n")
+    cat("=======================================================================================")
+    cat("\n")
+    print(check, row.names = F, right = F)
+    cat("=======================================================================================")
+    sink()
+  }
 
 }# end check.buzzard_db
 # rm(list = ls())
 # library(magrittr)
-#input <- ("../../01-PhD/00-Raw/RData/buzzard_db.RData")
-#output = tempfile()
+# input <- ("../../01-PhD/00-Raw/RData/buzzard_db.RData")
+# load(input)
+# output = tempfile()

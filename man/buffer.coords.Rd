@@ -4,8 +4,7 @@
 \alias{buffer.coords}
 \title{buffer aroud point}
 \usage{
-buffer.coords(input = NULL, radius = 500, out = NULL,
-  root = "C:/OSGeo4W64")
+buffer.coords(input = NULL, radius = 500, out = NULL, root = "C:/OSGeo4W64")
 }
 \arguments{
 \item{input}{shape file with points}

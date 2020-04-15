@@ -4,8 +4,13 @@
 \alias{file.select}
 \title{Select most recent version of a file}
 \usage{
-file.select(path = NULL, pattern = NULL, type = NULL,
-  decreasing = T, not_in_pattern = NULL)
+file.select(
+  path = NULL,
+  pattern = NULL,
+  type = NULL,
+  decreasing = T,
+  not_in_pattern = NULL
+)
 }
 \arguments{
 \item{path}{folder to look up files}

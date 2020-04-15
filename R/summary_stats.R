@@ -1,6 +1,7 @@
 #' Summarise data frames
 #'
-#' @description Summarizes data by giving count, mean, standard deviation, standard error of the mean, and confidence interval
+#' @description
+#'  Summarizes data by giving count, mean, standard deviation, standard error of the mean, and confidence interval
 #'
 #' @param data
 #' a data frame

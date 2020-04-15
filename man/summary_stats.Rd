@@ -7,8 +7,14 @@
 Taken from the R cookbook (cookbook-r.com/Manipulating_data/Summarizing_data/)
 }
 \usage{
-summary_stats(data = NULL, measurevar = NULL, groupvars = NULL,
-  na.rm = FALSE, conf.interval = 0.95, drop = TRUE)
+summary_stats(
+  data = NULL,
+  measurevar = NULL,
+  groupvars = NULL,
+  na.rm = FALSE,
+  conf.interval = 0.95,
+  drop = TRUE
+)
 }
 \arguments{
 \item{data}{a data frame}

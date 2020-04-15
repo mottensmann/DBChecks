@@ -4,9 +4,14 @@
 \alias{resight.report}
 \title{Report of resightings}
 \usage{
-resight.report(x = NULL, buzzard_db = "RData/buzzard_db.RData",
-  out.file = NULL, digits = 2, lang = c("German", "English"),
-  brood = FALSE)
+resight.report(
+  x = NULL,
+  buzzard_db = "RData/buzzard_db.RData",
+  out.file = NULL,
+  digits = 2,
+  lang = c("German", "English"),
+  brood = FALSE
+)
 }
 \arguments{
 \item{x}{Ring}

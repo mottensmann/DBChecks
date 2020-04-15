@@ -4,8 +4,12 @@
 \alias{dist2nest}
 \title{Dist2Nest}
 \usage{
-dist2nest(ring_db = NULL, resights = NULL, repro_fledge_db = NULL,
-  species = c("Buteo, buteo", "Milvus milvus"))
+dist2nest(
+  ring_db = NULL,
+  resights = NULL,
+  repro_fledge_db = NULL,
+  species = c("Buteo, buteo", "Milvus milvus")
+)
 }
 \arguments{
 \item{ring_db}{ring_db}

@@ -26,6 +26,6 @@ Imports:
     rtf,
     stringr
 License: GPL (>= 2)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 BugReports: https://github.com/mottensmann/DBChecks/issues
 URL: https://github.com/mottensmann/DBChecks
