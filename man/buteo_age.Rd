@@ -9,7 +9,9 @@ buteo_age(
   wing = "wing",
   sex = "sex",
   unit = c("mm", "cm"),
-  .plot = F
+  .plot = F,
+  decimals = 2,
+  .show_model = T
 )
 }
 \arguments{
@@ -22,10 +24,17 @@ buteo_age(
 \item{unit}{unit of values. By default in mm}
 
 \item{.plot}{logical}
+
+\item{decimals}{decimals}
+
+\item{.show_model}{logical}
 }
 \description{
 Buzzard age is estimated based on a standard growth curve modeled from published data by
-Bijlsma (Limosa 72, 1999)
+Bijlsma (Limosa 72, 1999).
+}
+\details{
+Estimations are based on a four degree polynomial fit
 }
 \examples{
 ## 240 mm wing length
