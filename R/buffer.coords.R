@@ -1,4 +1,4 @@
-#' buffer aroud point
+#' buffer around point
 #'
 #' @description creates a buffer of radius n around points within a shape
 #' @details radius within units of the coordinate system (i.e. apply using UTM32N)

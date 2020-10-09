@@ -13,7 +13,7 @@ remove.dupl.resight <- function(resights = NULL, threshold = 1) {
     ## subset data
     resights_ind <- dplyr::filter(resights_known, Ring == ind)
     ## check if there are duplicates
-    ## Same date and same coordincates (resolution 1km)
+    ## Same date and same coordinates (resolution 1km)
     if (any(duplicated(resights_ind$Date))) {
       out <- lapply(resights_ind$Date %>% unique, function(date) {
         resights_date <- dplyr::filter(resights_ind, Date == date)
@@ -22,6 +22,9 @@ remove.dupl.resight <- function(resights = NULL, threshold = 1) {
             obs <- unique(resights_date$Observer) %>%
               paste0(., collapse = ";")
             resights_date$Observer[1] <- obs
+            source <- unique(resights_date$Source) %>%
+              paste0(., collapse = ";")
+            resights_date$Source[1] <- source
             return(resights_date[1,])
           } else {
             return(resights_date)

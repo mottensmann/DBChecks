@@ -19,7 +19,7 @@ summary_stats(
 \arguments{
 \item{data}{a data frame}
 
-\item{measurevar}{the name of a column that contains the variable to be summariezed}
+\item{measurevar}{the name of a column that contains the variable to be summarised}
 
 \item{groupvars}{a vector containing names of columns that contain grouping variables}
 
