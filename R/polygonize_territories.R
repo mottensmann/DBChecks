@@ -44,13 +44,13 @@ polygonise_territories <- function(nests = buzzard_db[["repro_fledge_db"]],
   ## Apply for each territory
 
   silent <- pbapply::pblapply(unique(nests[["Terr_ID"]]), function(terr) {
-    ## selet nests and create shape file
+    ## select nests and create shape file
     shape <- dplyr::filter(nests, Terr_ID == terr)[,c("N", "E", "Terr_ID")] %>%
       unique.data.frame()
 
     ## check if minimum number of three nests exist
     if (nrow(shape) < 3) {
-      ## add dummy coordinates to create polyon
+      ## add dummy coordinates to create polygon
       if (nrow(shape) == 1) {
         dummy_north <- shape
         dummy_north[["N"]] <- dummy_north[["N"]] + .00037

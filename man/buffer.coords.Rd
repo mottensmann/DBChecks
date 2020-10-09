@@ -2,7 +2,7 @@
 % Please edit documentation in R/buffer.coords.R
 \name{buffer.coords}
 \alias{buffer.coords}
-\title{buffer aroud point}
+\title{buffer around point}
 \usage{
 buffer.coords(input = NULL, radius = 500, out = NULL, root = "C:/OSGeo4W64")
 }

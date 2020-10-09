@@ -20,10 +20,14 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("\n")
   cat("=======================================================================================")
   cat("\n\nbuzzard_db version info:\n")
-  print(buzzard_db[["version"]], row.names = F)
+  print(buzzard_db[["version"]], row.names = F, max.print = 999)
   cat("=======================================================================================",
       "\n\n")
   sink()
+
+  results <- list()
+  results$date <- Sys.Date()
+  results$version <- buzzard_db[["version"]]
   ## -------------------------------------------------------------------------
 
   ## 1. Duplicated rings:
@@ -54,14 +58,18 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("1. Duplicated Ring entries:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned[,c("Ring", "ID", "Territory", "Year", "Age")], row.names = F, right = F)
+  print(pruned[,c("Ring", "ID", "Territory", "Year", "Age")], row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
+  results$dupl.rings <- pruned[,c("Ring", "ID", "Territory", "Year", "Age")]
   ## -------------------------------------------------------------------------
 
   ## 2. Duplicated IDs:
   ## -------------------------------------------------------------------------
   # x <- "Metal right, white wingtag TN"
+
+  buzzard_db$ring_db$ID <- stringr::str_replace(buzzard_db$ring_db$ID, "Metal left", "Metal right")
+
   dupl.ids <-
     dplyr::filter(buzzard_db[["ring_db"]],
                   ID %in% check.dupl("ID", buzzard_db[["ring_db"]],
@@ -115,9 +123,10 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("2. Duplicated Wingtags:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned[,c("ID", "Ring", "Territory", "Year", "Dead", "DateDeath")], row.names = F, right = F)
+  print(pruned[,c("ID", "Ring", "Territory", "Year", "Dead", "DateDeath")], row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
+  results$dupl.tags <- pruned[,c("ID", "Ring", "Territory", "Year", "Dead", "DateDeath")]
   ## -------------------------------------------------------------------------
 
   ## 3. Duplicated Terr_IDs in ring_db
@@ -142,7 +151,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("3.1 Duplicated Terr_ID in Ringing list:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned, row.names = F, right = F)
+  print(pruned, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
 
@@ -168,7 +177,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("3.2 Duplicated Terr_ID in Repro & Fledging:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned, row.names = F, right = F)
+  print(pruned, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
 
@@ -185,7 +194,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("4. Nests shared among territories:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(dupl.nests[order(dupl.nests[["Nest"]]), 2:1], row.names = F, right = F)
+  print(dupl.nests[order(dupl.nests[["Nest"]]), 2:1], row.names = F, right = F,max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -200,7 +209,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("5. Missing Nest coordinates:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(missing.coords[, c("Territory", "Year", "Repro")], row.names = F, right = F)
+  print(missing.coords[, c("Territory", "Year", "Repro")], row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -236,7 +245,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("\t[i.e. scoring differs between sampling points]\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned, row.names = F, right = F)
+  print(pruned, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -276,7 +285,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("\t[i.e. it is ambiguous where a chick was raised]\n")
   cat("=======================================================================================")
   cat("\n")
-  print(unknown_broods, row.names = F, right = F)
+  print(unknown_broods, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -312,7 +321,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("9. Repro != Ring number. Please check:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(pruned, row.names = F, right = F)
+  print(pruned, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -345,7 +354,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("8. Distance between Nest and Territory center > 1.5 km:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(out, row.names = F, right = F)
+  print(out, row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
   ## -------------------------------------------------------------------------
@@ -359,7 +368,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   cat("9. Missing Nests (i.e. no GPX available):\n")
   cat("=======================================================================================")
   cat("\n")
-  print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F, max = 999)
+  print(missing.nests[, c("Territory", "Year", "Repro")], row.names = F, right = F, max.print = 999)
   cat("=======================================================================================")
   sink()
 
@@ -391,10 +400,10 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     do.call("rbind",.)
   sink(output, append = T)
   cat("\n\n")
-  cat("6. Multiple Nests for the same territory x year:\n")
+  cat("6. Multiple Nests for the same territory within the same year:\n")
   cat("=======================================================================================")
   cat("\n")
-  print(out, row.names = F, right = F)
+  print(out, row.names = F, right = F, max.print = 9999)
   cat("=======================================================================================")
   sink()
 
@@ -438,13 +447,25 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   if (any(isFALSE(repro.tests))) {
     sink(output, append = T)
     cat("\n\n")
-    cat("Plausability of values in Repro & Fledge")
+    cat("Plausability of values in Repro & Fledge\n")
     cat("=======================================================================================")
     cat("\n")
     print(tests, row.names = F, right = F, max.print = 999)
     cat("=======================================================================================")
     sink()
   }
+
+  ## no resightings of breeding birds
+
+  missing.res <- check.breeders()
+  sink(output, append = T)
+  cat("\n\n")
+  cat("Breeding individuals without resighting in the breeding season\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(missing.res, row.names = F, right = F, max.print = 999)
+  cat("=======================================================================================")
+  sink()
 
   ## resightings after death
   dead <- dplyr::filter(buzzard_db$ring_db, !is.na(Dead))[["Ring"]] %>%
@@ -471,7 +492,7 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
   if (nrow(test) > 0) {
     sink(output, append = T)
     cat("\n\n")
-    cat("Check plausability of resights for dead encounters")
+    cat("Check plausability of resights for dead encounters\n")
     cat("=======================================================================================")
     cat("\n")
     print(test, row.names = F, right = F, max.print = 999)
@@ -498,10 +519,58 @@ check.buzzard_db <- function(input = "RData/buzzard_db.RData",
     cat("Missing death information:\n")
     cat("=======================================================================================")
     cat("\n")
-    print(check, row.names = F, right = F)
+    print(check, row.names = F, right = F, max.print = 999)
     cat("=======================================================================================")
     sink()
   }
+
+  resights <- buzzard_db$resights %>%
+    dplyr::filter(., Ring %in% buzzard_db$ring_db$Ring)
+
+  ## question 1: Resight before ringing
+  test <- dplyr::filter(resights, DaysSinceRinging < 0)
+  if (nrow(test) > 0) {
+    sink(output, append = T)
+    cat("\n\n")
+    cat("ID recorded before ringing:\n")
+    cat("=======================================================================================")
+    cat("\n")
+    print(test, row.names = F, right = F, max.print = 999)
+    cat("=======================================================================================")
+    sink()
+  }
+
+  ### Check for ambiguity in resights
+  # ===========================================================================
+  test <- lapply(1:nrow(resights), function(case) {
+    ## focal case
+    df <- resights[case,]
+    ## same id
+    ref <- dplyr::filter(buzzard_db$ring_db,
+                         ID == df$ID,
+                         Date <= df$Date)[,c("Ring", "ID", "Territory","DateDeath")] %>%
+      unique.data.frame()
+    if (any(!is.na(ref$DateDeath))) {
+      ref <- dplyr::filter(ref, DateDeath >= df$Date)
+    }
+
+    if (length(unique(ref$Ring)) > 1) {
+      return(data.frame(df[,c("Ring", "ID", "Date", "Remarks")], Ind_with_same_ID = paste(ref$Ring, collapse = ";")))
+    }
+
+  }) %>%
+    do.call("rbind",.)
+
+  sink(output, append = T)
+  cat("\n\n")
+  cat("Ambigious wingtag resightings:\n")
+  cat("=======================================================================================")
+  cat("\n")
+  print(test, row.names = F, right = F, max.print = 999)
+  cat("=======================================================================================")
+  sink()
+  results$ambigious.resights <- test
+  return(results)
 
 }# end check.buzzard_db
 # rm(list = ls())

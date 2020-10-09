@@ -263,6 +263,7 @@ resight.report <- function(x = NULL, buzzard_db = "RData/buzzard_db.RData", out.
     rtf::endParagraph(rtf)
   }
   rtf::done(rtf)
+  rm(buzzard_db)
   print("done")
 }
 

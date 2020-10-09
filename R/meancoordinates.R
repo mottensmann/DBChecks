@@ -16,7 +16,11 @@ meancoordinates <- function(df = NULL, root = NULL) {
   if ("RQGIS3" %in% rownames(installed.packages())) {
     library(RQGIS3)
   } else {
-    stop("Install RQGIS3 to proceed")
+    warning("Install RQGIS3 to proceed")
+    input <- readline(prompt="Requires RQGIS3: Press 'Y' to install")
+    if (input == "Y") {
+      devtools::install_github("jannes-m/RQGIS3")
+    }
   }
 
   ## Where to find RQGIS

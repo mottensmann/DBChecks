@@ -36,7 +36,7 @@ return(distances$Terr_ID %>% unique)
 
 
 # rm(list = ls())
- load("../../01-PhD/00-Raw/RData/buzzard_db.RData")
+# load("../../01-PhD/00-Raw/RData/buzzard_db.RData")
 # df = buzzard_db$repro_fledge_db
 # year = 2019
 # terr.id <- 383

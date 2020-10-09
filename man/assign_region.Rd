@@ -4,8 +4,7 @@
 \alias{assign_region}
 \title{Assign nest to natural region}
 \usage{
-assign_region(lat = NULL, long = NULL, overlay = NULL,
-  root = "C:/OSGeo4W64")
+assign_region(lat = NULL, long = NULL, overlay = NULL, root = "C:/OSGeo4W64")
 }
 \arguments{
 \item{lat}{latitude}

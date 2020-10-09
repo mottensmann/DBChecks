@@ -6,6 +6,7 @@ Authors@R: c(person("Meinolf", "Ottensmann", email = "meinolf.ottensmann@web.de"
 Description: Checks an existing database to flag potential issues.
 Encoding: UTF-8
 LazyData: true
+Language: en-GB
 Depends:
     R (>= 3.2.5)
 Imports:
@@ -24,8 +25,9 @@ Imports:
     filesstrings,
     reticulate,
     rtf,
-    stringr
+    stringr,
+    lubridate
 License: GPL (>= 2)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 BugReports: https://github.com/mottensmann/DBChecks/issues
 URL: https://github.com/mottensmann/DBChecks

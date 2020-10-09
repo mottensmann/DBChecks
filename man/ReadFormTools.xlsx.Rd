@@ -4,8 +4,7 @@
 \alias{ReadFormTools.xlsx}
 \title{Format FormTools output}
 \usage{
-ReadFormTools.xlsx(path = "data", file = "webform_download",
-  type = ".xlsx")
+ReadFormTools.xlsx(path = "data", file = "webform_download", type = ".xlsx")
 }
 \arguments{
 \item{path}{path}
