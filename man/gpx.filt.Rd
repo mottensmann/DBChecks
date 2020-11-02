@@ -33,7 +33,3 @@ Removes duplicates from gpx files based on identical coordinates and
 elevation. Additional arguments allow to extract gpx points within a
 user-defined grid. Requires packages magrittr and readOGR to be installed.
 }
-\examples{
-## Not run
-# test <- gpx.filt(input = "../../../Dropbox/Fieldsaison_2019/GPX data/Pooled_GPX_2019-07-11.gpx",                       region = data.frame(north = 52.22, east = 8.52, south = 51.98, west = 8.30))
-}

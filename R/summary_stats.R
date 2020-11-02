@@ -26,7 +26,7 @@
 #'
 #' @export
 #'
-summary_stats <- function(data = NULL, measurevar = NULL, groupvars = NULL, na.rm = FALSE, conf.interval = 0.95, drop = TRUE) {
+summary_stats = function(data = NULL, measurevar = NULL, groupvars = NULL, na.rm = FALSE, conf.interval = 0.95, drop = TRUE) {
 
 length2 <- function(x, na.rm = FALSE) {
         if (na.rm) {

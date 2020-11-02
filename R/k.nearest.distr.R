@@ -3,7 +3,6 @@
 #' @description
 #' Computes k-nearest neighbour values within a year
 #'
-#' @param
 #'
 #' @import magrittr
 #' @param dat data frame with columns Id, Year, Lat & Lon

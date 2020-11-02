@@ -15,9 +15,6 @@
 #'
 #' @param reduced logical
 #'
-#' @examples
-#' ## Not run
-#' # test <- gpx.filt(input = "../../../Dropbox/Fieldsaison_2019/GPX data/Pooled_GPX_2019-07-11.gpx",                       region = data.frame(north = 52.22, east = 8.52, south = 51.98, west = 8.30))
 #' @export
 #'
 gpx.filt <- function(input = NULL,

@@ -1,8 +1,7 @@
-# Collection of usueful functions to check and handle databases in R
-
+# Collection of functions for sanity checks of databases in R (plus some functions to run QGIS via R)
 ***
 
-*This package is developed to apply some testing for a specific case. Still some parts might apply elsewhere ...*
+*This package is developed to apply some testing for a specific case. Still some code could be adapted to other problems. However it will not just run and the package does not take care of all dependencies ...*
 
 ***
 
@@ -17,7 +16,11 @@ devtools::install_github(repo = "mottensmann/DBChecks")
 
 ### Overview of the repository content
 
--   **`R`** Some functions
+#### **`R`** Some functions
+* `habitat.analysis.R`: Script to run the `QGIS` toolbox via `RQGIS3`
+* `summary_stats.R`: Function to quickly summarise data frames 
+* `gpx.filt.R`: Set of functions to filter gpx files
+* ...
 
 ### Usage
 

@@ -39,6 +39,9 @@ if ("RQGIS3" %in% rownames(installed.packages())) {
 }
 ## ###########################################################################
 
+## define output file
+.RData <- stringr::str_replace(overlay, ".shp", ".RData")
+
 
 ## Loop through features
 ## ###########################################################################
@@ -95,6 +98,8 @@ results <- lapply(features, function(one_feature) {
   return(out)
 }) %>%
   set_names(names(features))
+
+save(results, file = .RData)
 return(results)
 }
 

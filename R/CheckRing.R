@@ -2,7 +2,7 @@
 #'
 #' @param Lookup access database with variable definitions
 #' @param DNS1 RING Database used as standard
-#' @param DNS2 RING Databse to check
+#' @param DNS2 RING Database to check
 #' @import RODBC magrittr
 #' @export
 #'
@@ -14,7 +14,6 @@ CheckRing <- function(DNS1 = "Ring2017", DNS2 = "Ring2018", Lookup = "Lookup") {
 
   ch2 <- RODBC::odbcConnect(DNS2)
   cat('Connect to DNS2 ... \n')
-
 
   ## retrieve data
   tblRinging.ref <- sqlFetch(ch1, "tblRinging", as.is = T)
@@ -250,6 +249,8 @@ CheckRing <- function(DNS1 = "Ring2017", DNS2 = "Ring2018", Lookup = "Lookup") {
   x <- tblRinging.new[["strRingNr"]]
   x <- gsub(pattern = ".", replacement = "", x =  x, fixed = TRUE)
   x <- gsub(pattern = "J", replacement = "9999999999", x =  x, fixed = TRUE)
+  x <- gsub(pattern = "A", replacement = "8888888888", x =  x, fixed = TRUE)
+
   x <- unique(x)
   x <- as.numeric(x)
   x <- sort(x)
@@ -262,6 +263,8 @@ CheckRing <- function(DNS1 = "Ring2017", DNS2 = "Ring2018", Lookup = "Lookup") {
   out[["Number"]] <- (out[["LastRing"]] - out[["FirstRing"]]) + 1
   out[["FirstRing"]] <- gsub(pattern = "9999999999", replacement = "J", out[["FirstRing"]])
   out[["LastRing"]] <- gsub(pattern = "9999999999", replacement = "J", out[["LastRing"]])
+  out[["FirstRing"]] <- gsub(pattern = "8888888888", replacement = "A", out[["FirstRing"]])
+  out[["LastRing"]] <- gsub(pattern = "8888888888", replacement = "A", out[["LastRing"]])
   cat("\nOverview ring series:\n\n")
   print(out)
 

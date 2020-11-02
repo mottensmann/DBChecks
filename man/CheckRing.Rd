@@ -9,7 +9,7 @@ CheckRing(DNS1 = "Ring2017", DNS2 = "Ring2018", Lookup = "Lookup")
 \arguments{
 \item{DNS1}{RING Database used as standard}
 
-\item{DNS2}{RING Databse to check}
+\item{DNS2}{RING Database to check}
 
 \item{Lookup}{access database with variable definitions}
 }
