@@ -92,8 +92,8 @@ results <- lapply(features, function(one_feature) {
 
   ## discard temp files
   ## ##################
-  unlink(temp.file)
-  unlink(temp.file2)
+  unlink.shp(temp.file)
+  unlink.shp(temp.file2)
   #####################
   return(out)
 }) %>%

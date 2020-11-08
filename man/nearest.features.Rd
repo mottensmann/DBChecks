@@ -7,7 +7,7 @@
 nearest.features(
   features = NULL,
   overlay = NULL,
-  point = NULL,
+  point = stringr::str_replace(overlay, "buffer.shp", ".shp"),
   root = "C:/OSGeo4W64"
 )
 }
@@ -16,7 +16,7 @@ nearest.features(
 
 \item{overlay}{overlay ESRI shape file}
 
-\item{point}{nest coordinate}
+\item{point}{point ESRI shape file}
 
 \item{root}{root of QGIS installation. By default attemtps to find it}
 }
