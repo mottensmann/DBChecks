@@ -11,14 +11,14 @@
 #'
 #' @param features list of ESRI shapes
 #' @param overlay overlay ESRI shape file
-#' @param point nest coordinate
+#' @param point point ESRI shape file
 #' @inheritParams meancoordinates
 #' @import magrittr
 #' @export
 #'
 nearest.features <- function(features = NULL,
                              overlay =  NULL,
-                             point = NULL,
+                             point = stringr::str_replace(overlay, "buffer.shp", ".shp"),
                              root =  'C:/OSGeo4W64') {
 
   ## checks:
@@ -41,12 +41,13 @@ nearest.features <- function(features = NULL,
   ## ###########################################################################
 
   ## define output file
-  .RData <- stringr::str_replace(overlay, ".shp", ".test.RData")
+  .RData <- stringr::str_replace(overlay, ".shp", ".edges.RData")
 
 
   ## Loop through features
   ## ###########################################################################
   results <- lapply(features, function(one_feature) {
+    #cat(one_feature, "\n")
 
     temp.file <- temp.shp()
     ## Clip to overlay extent
@@ -62,6 +63,7 @@ nearest.features <- function(features = NULL,
 
     ## Convert to Lines
     ## ####################
+    if (nrow(x) > 1) {
     temp.file2 <- temp.shp()
     if (any(names(x) == "Area")) {
       x <- RQGIS3::run_qgis(
@@ -105,14 +107,22 @@ nearest.features <- function(features = NULL,
       show_output_paths = F,
       load_output = T)
 
+
     ## discard temp files
     ## ##################
-    unlink(temp.file)
-    unlink(temp.file2)
-    unlink(temp.file3)
-    unlink(temp.file4)
+    unlink.shp(temp.file)
+    unlink.shp(temp.file2)
+    unlink.shp(temp.file3)
+    unlink.shp(temp.file4)
     #####################
     return(ifelse(length(x$Distance) > 0, min(x$Distance), NA))
+
+    } else {
+    ## no geometry detected
+    return(NA)
+    }
+
+
   }) %>%
     set_names(names(features)) %>%
     do.call("cbind",.) %>%
@@ -122,7 +132,7 @@ nearest.features <- function(features = NULL,
   return(results)
 }
 
-#
+
 # library(DBChecks)
 # test <- nearest.features(features = list(
 #   Forest = "../../01-PhD/GIS-Projects/04-HabitatImprinting/DLM/Forest.shp",
@@ -131,6 +141,6 @@ nearest.features <- function(features = NULL,
 #   Streams =  "../../01-PhD/GIS-Projects/04-HabitatImprinting/DLM/Streams.shp",
 #   Street =  "../../01-PhD/GIS-Projects/04-HabitatImprinting/DLM/Streets.shp",
 #   Mainroad = "../../01-PhD/GIS-Projects/04-HabitatImprinting/DLM/MainRoad.shp"),
-#   overlay = "../../01-PhD/01-Paper/03-Age-of-first-reproduction/data/GIS/nest1buffer.shp",
-#   point = "../../01-PhD/01-Paper/03-Age-of-first-reproduction/data/GIS/nest1.shp",
+#   overlay = "../../01-PhD/01-Paper/03-Age-of-first-reproduction/data/GIS/nest22buffer.shp",
 #   root = 'C:/OSGeo4W64')
+# one_feature <- features$Wood

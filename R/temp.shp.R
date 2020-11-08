@@ -8,3 +8,16 @@ temp.shp <- function() {
                             collapse = ""), ".shp"))
   return(temp.file)
 }
+
+#' Remove temporary shape files
+#' @param file file name
+#' @export
+#'
+unlink.shp <- function(file = NULL) {
+  ## make names
+  to_unlink <- stringr::str_replace(string = file, pattern = ".shp",
+                       replacement = c(".shp", ".dbf", ".prj", ".shx", ".qpj"))
+  silent <- lapply(to_unlink, unlink)
+}
+
+
